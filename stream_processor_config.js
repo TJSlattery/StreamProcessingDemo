@@ -69,5 +69,5 @@ let spconfig = [
            }
         }
      }
-    // You can add a final $project stage to clean up the output
-  ]
+    // You can add a final $validation stage to verify data integrity and write to a dead letter queue if necessary
+    ]
