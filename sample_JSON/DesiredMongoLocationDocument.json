@@ -1,0 +1,27 @@
+{
+  "_id": "131D7000000oiRLIAY",
+  "createdBy": "Oliver Enablement",
+  "createdDate": {
+    "$date": "2025-03-19T19:11:21.000Z"
+  },
+  "lastModifiedBy": "Lisa Leadership",
+  "lastModifiedDate": {
+    "$date": "2025-04-03T18:53:23.000Z"
+  },
+  "id": "131D7000000oiRLIAY",
+  "customerAccountId": 4,
+  "locationType": "Shipping Address",
+  "isFreightForwarder": false,
+  "isDefault": true,
+  "name": "9416 Peach Street Oakland CA US",
+  "phone": "missingfromSF",
+  "address": {
+    "city": "Oakland",
+    "country": "US",
+    "latitude": 0,
+    "longitude": 0,
+    "postalCode": "94603",
+    "state": "CA",
+    "street": "9416 Peach Street"
+  }
+}
