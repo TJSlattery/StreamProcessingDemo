@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import time
 import datetime
 import random
+import os
 
 # MongoDB destionation connection details
 MONGO_URI_CLUSTER2 = os.environ.get("CLUSTER2_URI")  # Replace with your cluster2 connection string
