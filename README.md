@@ -1,8 +1,4 @@
-Here’s a clean, well-formatted `README.md` version of your content, complete with headers, sub-bullets, and emojis. You can copy and paste this directly into a file:
-
----
-
-# ⚡ Salesforce Data Integration with MongoDB Atlas and Kafka
+# Salesforce Data Integration with MongoDB Atlas and Kafka
 
 This project demonstrates how to use **MongoDB Atlas Stream Processing** to transform and enrich **Salesforce CDC (Change Data Capture)** events in real-time. The data flow includes **Kafka** as a message broker, with both source and destination data stored in **MongoDB Atlas** clusters.
 
@@ -26,7 +22,7 @@ Before you begin, ensure the following are installed/configured:
   - `pymongo` – MongoDB connectivity
   - `faker` – Generate sample data
   - `random`, `datetime`, `time`, `os` – Standard Python libraries
-- **MongoDB Atlas Account** – Free tier (M0) is sufficient
+- **MongoDB Atlas Account** – Free tier (M0) and is sufficient (Limit one per project)
 - **Confluent Cloud Account** – For Kafka cluster and connectors
 - **Environment Variables**:
   - `CLUSTER2_URI` – MongoDB connection string for **destination** cluster
@@ -44,6 +40,7 @@ pip install pymongo faker
 ### 1️⃣ Create Source MongoDB Atlas Cluster (`Cluster1`)
 
 - Log in to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+- Create a new project
 - Click **"Build a Database"**
 - Select your preferred cloud provider
 - Choose **"M0 Free Tier"** for testing
@@ -58,7 +55,7 @@ pip install pymongo faker
 
 ### 2️⃣ Create Destination MongoDB Atlas Cluster (`Cluster2`) & Populate Reference Data
 
-- Follow the same steps as above to create a second cluster
+- Follow the same steps as above to create a second cluster in a new project
 - Name it **"Cluster2"**
 - Create a database user and set up network access
 - Export the connection string as an environment variable: `CLUSTER2_URI`
@@ -84,7 +81,6 @@ pip install pymongo faker
   - Configure the connector with:
     - Cluster1 connection string
     - Topic: `demo.sample_salesforce.cdc_events`
-    - Enable change streams on source collections
 
 ---
 
@@ -95,13 +91,13 @@ pip install pymongo faker
 - Click **"Create New Instance"**
 - Select:
   - Preferred cloud provider & region
-  - Size (XS or S is fine for demo)
+  - Size (SP10 is fine for demo)
   - Name (e.g., `SalesforceStreamProcessor`)
 
 #### Create 2 connections:
 - `salesforce_cdc`: Kafka cluster
   - Provide **Bootstrap server address**
-  - Configure **SASL/SCRAM** authentication
+  - Configure **SASL/SCRAM** authentication (enter your Confluent API Key)
 - `demo_destination`: MongoDB Cluster2
   - Use your `CLUSTER2_URI` connection string
 
@@ -111,16 +107,31 @@ pip install pymongo faker
 
 ### 5️⃣ Configure the Stream Processor
 
-- Open the Stream Processor CLI
-- Copy & paste contents of `stream_processor_config.js`
+#### Connect to Your Stream Processor
+
+1. In **MongoDB Atlas**, go to your **Stream Processing** instance
+2. In the **Overview** panel, click **Connect**
+3. Select **"I have the MongoDB shell installed"**
+4. From the **Select your mongo shell version** dropdown, choose the **latest version of `mongosh`**
+5. Copy the connection string shown under **"Run your connection string in your command line"**
+6. Open a terminal and connect using the copied connection string:
+   ```bash
+   mongosh "your-stream-processor-connection-string"
+   ```
+7. Click **Close** in the Atlas UI after copying
+
+> 💡 You’ll use this shell session to run the stream processor setup command in the next step.
+
+#### Deploy the Stream Processor
+
+- After connecting, copy and paste the contents of `stream_processor_config.js`
 - Then run:
-```js
-sp.createStreamProcessor("salesforcedemo", spconfig)
-```
+  ```js
+  sp.createStreamProcessor("salesforcedemo", spconfig)
+  ```
 
----
 
-## 🔁 Pipeline Explanation
+## Pipeline Explanation
 
 The Stream Processor configuration defines a pipeline with these stages:
 
@@ -133,26 +144,26 @@ The Stream Processor configuration defines a pipeline with these stages:
 
 ---
 
-## 🧪 Generate Sample Salesforce Data
+## Generate Sample Salesforce Data
 
 Run the provided **data simulation script**.
 
 This will:
-- 🔄 Clear existing source and destination data
-- 🚀 Generate **1000 CDC-like events**, 1 per second
-- 🗺️ Each event includes **location info**, emulating Salesforce CDC output
+- Clear existing source and destination data
+- Generate **1000 CDC-like events**, 1 per second
+- Each event includes **location info**, emulating Salesforce CDC output
 
 ---
 
-## 🔄 Data Flow and Transformation
+## Data Flow and Transformation
 
 Here's how the end-to-end flow works:
 
-1. 📝 Sample Salesforce data is inserted into `Cluster1`
-2. 📡 Kafka reads changes via the **Confluent MongoDB Atlas Source connector**
-3. 🧠 Stream Processor consumes Kafka messages
-4. 🔍 Processor performs **lookups, transformations, enrichments**
-5. 📦 Final output is written to `Cluster2`
+1. Sample Salesforce data is inserted into `Cluster1`
+2. Kafka reads changes via the **Confluent MongoDB Atlas Source connector**
+3. Stream Processor consumes Kafka messages
+4. Processor performs **lookups, transformations, enrichments**
+5. Final output is written to `Cluster2`
 
 > This showcases the power of **MongoDB Atlas Stream Processing** for **real-time, low-code data integration**.
 
@@ -164,5 +175,3 @@ Here's how the end-to-end flow works:
 - **Transformed MongoDB Document** – Enriched and reshaped output
 
 ---
-
-Let me know if you'd like this turned into a downloadable file, or want code snippets embedded in the doc as well.
